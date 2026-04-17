@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Palta Clicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="juego">
+        <h1>Imperio Paltero 🥑</h1>
+        
+        <div class="marcador">
+            <h2>Paltas: <span id="contador-paltas">0</span></h2>
+            <p>Paltas por segundo (PPS): <span id="contador-pps">0</span></p>
+        </div>
+
+        <div class="area-click">
+            <div id="gran-palta" class="palta-gigante">🥑</div>
+        </div>
+
+        <div class="tienda">
+            <h3>🛒 Mercado Negro</h3>
+            <button id="btn-comprar-abuela">
+                Contratar Abuela Granjera 👵<br>
+                <small>Costo: <span id="costo-abuela">50</span> Paltas</small>
+            </button>
+            <button id="btn-comprar-maquina" style="margin-top: 10px; background-color: #9b59b6;">
+                Máquina Clonadora 📠<br>
+                <small>Costo: <span id="costo-maquina">500</span> Paltas (+10 PPS)</small>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
