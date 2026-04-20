@@ -4,6 +4,43 @@ let paltasPorSegundo = 0;
 let costoAbuelaActual = 50; // ¿A cuánto cotiza la abuela granjera hoy?
 let costoMaquinaActual = 500; // La tecnología es cara
 
+// --- FUNCIÓN DE CARGA (Memory Card) ---
+function cargarProgreso() {
+    const partida = JSON.parse(localStorage.getItem("paltaSave"));
+
+    if (partida) {
+        // Recuperamos los valores de la caja
+        paltas = partida.paltas;
+        paltasPorSegundo = partida.pps;
+        costoAbuelaActual = partida.costoAbuela;
+        costoMaquinaActual = partida.costoMaquina;
+        
+        // ¡Pintamos la pantalla con lo recuperado!
+        document.getElementById("contador-paltas").innerText = paltas; 
+        document.getElementById("contador-pps").innerText = paltasPorSegundo;
+        document.getElementById("costo-abuela").innerText = costoAbuelaActual;
+        document.getElementById("costo-maquina").innerText = costoMaquinaActual;
+        
+        console.log("Sistema: Datos recuperados. Bienvenida de nuevo, Master. 🥑");
+    }
+}
+
+// --- FUNCIÓN DE GUARDADO ---
+function guardarProgreso() {
+    const datosASalvar = {
+        paltas: paltas,            // Nombre real de tu variable
+        pps: paltasPorSegundo,     // Guardamos la producción
+        costoAbuela: costoAbuelaActual, // Guardamos la inflación
+        costoMaquina: costoMaquinaActual
+    };
+    
+    localStorage.setItem("paltaSave", JSON.stringify(datosASalvar));
+    console.log("Sistema: Progreso guardado automáticamente. ✅");
+}
+
+// Ejecutamos la carga apenas abre el juego
+window.onload = cargarProgreso;
+
 // --- 2. LOS CABLES AL HTML ---
 let textoPaltas = document.getElementById("contador-paltas");
 let textoPPS = document.getElementById("contador-pps");
@@ -20,6 +57,7 @@ granPalta.addEventListener("click", hacerClick);
 function hacerClick() {
     paltas = paltas + 1; // Sumamos 1 palta a la matemática
     textoPaltas.innerText = paltas; // El pintor actualiza la pantalla
+    guardarProgreso();
 }
 
 // --- 4. LA TIENDA (Comprar Abuelas) ---
@@ -43,7 +81,8 @@ function comprarAbuela() {
         textoPaltas.innerText = paltas;
         textoPPS.innerText = paltasPorSegundo;
         textoCostoAbuela.innerText = costoAbuelaActual;
-        
+        guardarProgreso();
+
     } else {
         // Si somos pobres, el navegador nos avisa
         alert("¡No tenés suficientes paltas para contratar a esta señora!");
@@ -67,7 +106,8 @@ function comprarMaquina() {
         textoPaltas.innerText = paltas;
         textoPPS.innerText = paltasPorSegundo;
         textoCostoMaquina.innerText = costoMaquinaActual;
-        
+        guardarProgreso();
+
     } else {
         alert("¡Necesitás más presupuesto para tecnología punta!");
     }
@@ -88,3 +128,5 @@ function producirPaltas() {
         textoPaltas.innerText = paltas;
     }
 }
+
+setInterval(guardarProgreso, 30000);
