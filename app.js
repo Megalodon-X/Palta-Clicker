@@ -4,43 +4,6 @@ let paltasPorSegundo = 0;
 let costoAbuelaActual = 50; // ¿A cuánto cotiza la abuela granjera hoy?
 let costoMaquinaActual = 500; // La tecnología es cara
 
-// --- FUNCIÓN DE CARGA (Memory Card) ---
-function cargarProgreso() {
-    const partida = JSON.parse(localStorage.getItem("paltaSave"));
-
-    if (partida) {
-        // Recuperamos los valores de la caja
-        paltas = partida.paltas;
-        paltasPorSegundo = partida.pps;
-        costoAbuelaActual = partida.costoAbuela;
-        costoMaquinaActual = partida.costoMaquina;
-        
-        // ¡Pintamos la pantalla con lo recuperado!
-        document.getElementById("contador-paltas").innerText = paltas; 
-        document.getElementById("contador-pps").innerText = paltasPorSegundo;
-        document.getElementById("costo-abuela").innerText = costoAbuelaActual;
-        document.getElementById("costo-maquina").innerText = costoMaquinaActual;
-        
-        console.log("Sistema: Datos recuperados. Bienvenida de nuevo, Master. 🥑");
-    }
-}
-
-// --- FUNCIÓN DE GUARDADO ---
-function guardarProgreso() {
-    const datosASalvar = {
-        paltas: paltas,            // Nombre real de tu variable
-        pps: paltasPorSegundo,     // Guardamos la producción
-        costoAbuela: costoAbuelaActual, // Guardamos la inflación
-        costoMaquina: costoMaquinaActual
-    };
-    
-    localStorage.setItem("paltaSave", JSON.stringify(datosASalvar));
-    console.log("Sistema: Progreso guardado automáticamente. ✅");
-}
-
-// Ejecutamos la carga apenas abre el juego
-window.onload = cargarProgreso;
-
 // --- 2. LOS CABLES AL HTML ---
 let textoPaltas = document.getElementById("contador-paltas");
 let textoPPS = document.getElementById("contador-pps");
@@ -129,4 +92,49 @@ function producirPaltas() {
     }
 }
 
-setInterval(guardarProgreso, 30000);
+// --- 6. LA MEMORY CARD (Guardar y Cargar) ---
+
+// 💾 FUNCIÓN DE GUARDADO
+function guardarPartida() {
+    // Guardamos las 4 variables clave de nuestro imperio
+    localStorage.setItem("paltas", paltas);
+    localStorage.setItem("pps", paltasPorSegundo);
+    localStorage.setItem("costoAbuela", costoAbuelaActual);
+    localStorage.setItem("costoMaquina", costoMaquinaActual);
+    
+    // Un mensajito opcional para que sepas que funcionó
+    console.log("¡Juego guardado en la Memory Card!");
+}
+
+// ⏱️ EL AUTOGUARDADO (El que vos propusiste)
+// Ejecuta guardarPartida cada 30 segundos (30000 milisegundos)
+setInterval(guardarPartida, 30000);
+
+// (Opcional) Si querés que también guarde al hacer click manual, 
+// simplemente agregás guardarPartida(); adentro de tu función hacerClick().
+
+// 🔄 FUNCIÓN DE CARGA
+function cargarPartida() {
+    // Revisamos si existe una partida guardada (le preguntamos por las paltas)
+    let paltasGuardadas = localStorage.getItem("paltas");
+    
+    // Si NO es null, significa que hay datos viejos guardados
+    if (paltasGuardadas !== null) {
+        // IMPORTANTE: localStorage guarda todo como "Texto". 
+        // Usamos Number() para volver a convertirlo en números matemáticos.
+        paltas = Number(localStorage.getItem("paltas"));
+        paltasPorSegundo = Number(localStorage.getItem("pps"));
+        costoAbuelaActual = Number(localStorage.getItem("costoAbuela"));
+        costoMaquinaActual = Number(localStorage.getItem("costoMaquina"));
+        
+        // ¡Le avisamos a los pintores que actualicen el HTML apenas entramos!
+        textoPaltas.innerText = paltas;
+        textoPPS.innerText = paltasPorSegundo;
+        textoCostoAbuela.innerText = costoAbuelaActual;
+        textoCostoMaquina.innerText = costoMaquinaActual;
+    }
+}
+
+// 🚀 EJECUCIÓN INICIAL
+// Esto va suelto en tu código para que el juego intente cargar apenas abrís la página
+cargarPartida();
